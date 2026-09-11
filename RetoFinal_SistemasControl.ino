@@ -58,7 +58,7 @@ float computePID(float target, float actual_speed) {
   // 1. error
   float error = target - actual_speed;
 
-  // 2. componente Proporcional
+  // 2. componente proporcional
   float P = Kp * error;
 
   // 3. componente derivativo
@@ -67,7 +67,7 @@ float computePID(float target, float actual_speed) {
   speed_prev = actual_speed;
 
   // 4. límites de la integral
-  // margen disponible después de aplicar P, y si ya saturó el margen es cero.
+  // margen disponible después de aplicar P, y si ya saturó el margen es cero
   float i_max = U_MAX - P;
   float i_min = U_MIN - P;
   if (i_max < 0.0f) i_max = 0.0f;
@@ -77,7 +77,7 @@ float computePID(float target, float actual_speed) {
   float integral_new = integral + (Ki * error * Ts);
 
   // 6. prueba de saturación
-  // Se congela si la salida satura y el error empuja en la misma dirección de la saturación. 
+  // Se congela si la salida satura y el error empuja en la misma dirección de la saturación 
   float u_test = P + integral_new + D;
   bool empuja_arriba = (u_test > U_MAX) && (error > 0.0f);
   bool empuja_abajo  = (u_test < U_MIN) && (error < 0.0f);
@@ -132,7 +132,7 @@ ISR(TIMER1_COMPA_vect) {
   count = 0;
 
   // si el ciclo anterior todavía se está ejecutando, devolvemos los ticks al acumulador y se sale sin
-  // corromper el estado del PID.
+  // corromper el estado del PID
   static bool busy = false;
   if (busy) { count += ticks; return; }
   busy = true;
@@ -177,9 +177,9 @@ void setup() {
   TCCR1B = 0;
   TCNT1 = 0;
   OCR1A = 1249;
-  TCCR1B |= (1 << WGM12);  // Modo CTC
-  TCCR1B |= (1 << CS12);   // Prescaler 256
-  TIMSK1 |= (1 << OCIE1A); // Interrupción por comparación
+  TCCR1B |= (1 << WGM12);  // modo CTC
+  TCCR1B |= (1 << CS12);   // prescaler 256
+  TIMSK1 |= (1 << OCIE1A); // interrupción por comparación
   sei();
 
   // inicializar detenido
